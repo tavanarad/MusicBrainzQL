@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 })
 );
 
-function Home() {
+function HomePage() {
   const classes = useStyles();
   const [ query, setQuery ] = useState('');
   const [ queryType, setQueryType ] = useState(QUERY_TYPE.ARTIST);
@@ -94,4 +94,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default HomePage;
