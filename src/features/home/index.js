@@ -4,6 +4,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import BootstrapInput from '../../shared/components/bootstrap_input';
 import {QUERY_TYPE} from './constants'
 import {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 );
 
 function HomePage() {
+  const history = useHistory();
   const classes = useStyles();
   const [ query, setQuery ] = useState('');
   const [ queryType, setQueryType ] = useState(QUERY_TYPE.ARTIST);
@@ -49,6 +51,7 @@ function HomePage() {
   const onSubmit = () => {
     if (query && query !== '') {
       console.log(query, queryType);
+      history.push(`/search?query=${query}&type=${queryType}`);
     }
   }
 
