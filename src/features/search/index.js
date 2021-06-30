@@ -1,9 +1,12 @@
+import Header from "./header";
 import {useQueryParam} from "../../shared/hooks";
 
 function SearchPage() {
   const queryParameters = useQueryParam();
 
-  return (<p>Search for {queryParameters.get('query')} {queryParameters.get('type')}</p>);
+  return (
+    <Header />
+  );
 }
 
 export default SearchPage;
