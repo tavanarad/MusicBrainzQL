@@ -1,16 +1,22 @@
-import {useLazyQuery} from "@apollo/client";
-import {Container, GridList, makeStyles, useMediaQuery, useTheme} from "@material-ui/core";
-import {useEffect} from "react";
-import {useHistory} from "react-router-dom";
-import {QUERY_TYPE} from "../../shared/components/constants";
-import {useQueryParam} from "../../shared/hooks";
+import { useLazyQuery } from "@apollo/client";
+import {
+  Container,
+  GridList,
+  makeStyles,
+  useMediaQuery,
+  useTheme,
+} from "@material-ui/core";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { QUERY_TYPE } from "../../shared/components/constants";
+import { useQueryParam } from "../../shared/hooks";
+import ArtistCard from "./artist_card";
 import ArtistCardSkeleton from "./artist_card_skeleton";
 import Header from "./header";
-import {MB_SEARCH_ARTIST} from "./ql_queries";
-import ArtistCard from "./artist_card";
+import { MB_SEARCH_ARTIST } from "./ql_queries";
 
 const generateQuery = (query, type) => {
-  switch(type){
+  switch (type) {
     case QUERY_TYPE.ARTIST:
       return `name: "${query}"`;
     case QUERY_TYPE.GENRE:
@@ -18,39 +24,37 @@ const generateQuery = (query, type) => {
     default:
       return query;
   }
-}
+};
 
-const useStyles = makeStyles(() => (
-  {
-    resultContainer: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      overflow: 'hidden',
-      justifyContent: 'space-around',
-      marginTop: 20,
-    },
-    gridList: {
-      height: '100%',
-      width: '100vw',
-      justifyContent: 'space-around',
-    },
-    artistCard: {
-      width: 300,
-      minWidth: 200,
-      maxHeight: '208px !important',
-      margin: 5,
-    },
-    albumImages: {
-      height: 118,
-      textAlign: 'center',
-      background: 'lightgrey',
-    },
-    artistImage: {
-      width: 'auto',
-      height: '100%',
-    },
-  }
-));
+const useStyles = makeStyles(() => ({
+  resultContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    overflow: "hidden",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  gridList: {
+    height: "100%",
+    width: "100vw",
+    justifyContent: "space-around",
+  },
+  artistCard: {
+    width: 300,
+    minWidth: 200,
+    maxHeight: "208px !important",
+    margin: 5,
+  },
+  albumImages: {
+    height: 118,
+    textAlign: "center",
+    background: "lightgrey",
+  },
+  artistImage: {
+    width: "auto",
+    height: "100%",
+  },
+}));
 
 function SearchPage() {
   const classes = useStyles();
@@ -58,7 +62,7 @@ function SearchPage() {
   const history = useHistory();
 
   const theme = useTheme();
-  const mediaQueryMatch = useMediaQuery(theme.breakpoints.up('sm'));
+  const mediaQueryMatch = useMediaQuery(theme.breakpoints.up("sm"));
   const [search, { loading, data }] = useLazyQuery(MB_SEARCH_ARTIST);
   const searchQuery = () =>
     search({
