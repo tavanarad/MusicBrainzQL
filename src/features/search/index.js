@@ -1,17 +1,19 @@
-import Header from "./header";
+import {useLazyQuery} from "@apollo/client";
+import {Container, GridList, makeStyles, useMediaQuery, useTheme} from "@material-ui/core";
+import {useEffect} from "react";
+import {useHistory} from "react-router-dom";
 import {QUERY_TYPE} from "../../shared/components/constants";
-import {makeStyles, Container, CircularProgress} from "@material-ui/core";
 import {useQueryParam} from "../../shared/hooks";
-import {useQuery, useLazyQuery} from "@apollo/client";
+import ArtistCardSkeleton from "./artist_card_skeleton";
+import Header from "./header";
 import {MB_SEARCH_ARTIST} from "./ql_queries";
-import {Redirect, useHistory} from "react-router-dom";
-import { useEffect } from "react";
+import ArtistCard from "./artist_card";
 
 const generateQuery = (query, type) => {
   switch(type){
     case QUERY_TYPE.ARTIST:
       return `name: "${query}"`;
-    case QUERY_TYPE.QUERY_TYPE:
+    case QUERY_TYPE.GENRE:
       return `tag: "${query}"`;
     default:
       return query;
@@ -21,9 +23,32 @@ const generateQuery = (query, type) => {
 const useStyles = makeStyles(() => (
   {
     resultContainer: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      overflow: 'hidden',
+      justifyContent: 'space-around',
       marginTop: 20,
+    },
+    gridList: {
+      height: '100%',
+      width: '100vw',
+      justifyContent: 'space-around',
+    },
+    artistCard: {
+      width: 300,
+      minWidth: 200,
+      maxHeight: '208px !important',
+      margin: 5,
+    },
+    albumImages: {
+      height: 118,
       textAlign: 'center',
-    }
+      background: 'lightgrey',
+    },
+    artistImage: {
+      width: 'auto',
+      height: '100%',
+    },
   }
 ));
 
@@ -32,32 +57,44 @@ function SearchPage() {
   const queryParameters = useQueryParam();
   const history = useHistory();
 
-  const [search, { loading }] = useLazyQuery(MB_SEARCH_ARTIST);
+  const theme = useTheme();
+  const mediaQueryMatch = useMediaQuery(theme.breakpoints.up('sm'));
+  const [search, { loading, data }] = useLazyQuery(MB_SEARCH_ARTIST);
+  const searchQuery = () =>
+    search({
+      variables: {
+        query: generateQuery(
+          queryParameters.get("query"),
+          queryParameters.get("type")
+        ),
+      },
+    });
 
   useEffect(() => {
-    if(queryParameters.get('query')) {
-      search(
-        {
-          variables: {
-            query: generateQuery(
-              queryParameters.get('query'),
-              queryParameters.get('type')
-            )
-          },
-        }
-      );
+    if (queryParameters.get("query")) {
+      searchQuery();
     } else {
-      return history.push('/');
+      return history.push("/");
     }
-  }, []);
+  }, [queryParameters.get("query"), queryParameters.get("type")]);
 
   return (
     <>
       <Header />
       <Container maxWidth="xl" className={classes.resultContainer}>
-        { loading &&
-          <CircularProgress />
-        }
+        <GridList
+          cellHeight={208}
+          className={classes.gridList}
+          spacing={0}
+          cols={mediaQueryMatch ? 5 : 2}
+        >
+          {loading &&
+            [...new Array(50).keys()].map((i) => <ArtistCardSkeleton />)}
+          {data &&
+            data.search.artists.edges.map((artist) => (
+              <ArtistCard artist={artist} />
+            ))}
+        </GridList>
       </Container>
     </>
   );

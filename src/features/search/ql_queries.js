@@ -3,7 +3,7 @@ import {gql} from '@apollo/client';
 export const MB_SEARCH_ARTIST = gql`
 query Artist($query: String!) {
   search {
-    artists(query: $query, first: 1) {
+    artists(query: $query, first: 50) {
       ...labelResults
     }
   }
@@ -20,19 +20,29 @@ fragment labelResults on ArtistConnection {
       mbid
       name
       type
-      releases {
-        edges {
-          node {
-            mbid
-            title
-            coverArtArchive {
-              images {
-                image
-              }
-            }
-          }
-        }
+      mediaWikiImages {
+        url
       }
+      # releases {
+      #   nodes {
+      #     coverArtArchive {
+      #       images {
+      #         image
+      #       }
+      #     }
+      #   }
+      #   # edges {
+      #   #   node {
+      #   #     mbid
+      #   #     title
+      #   #     coverArtArchive {
+      #   #       images {
+      #   #         image
+      #   #       }
+      #   #     }
+      #   #   }
+      #   # }
+      # }
       tags {
         edges {
           node {
