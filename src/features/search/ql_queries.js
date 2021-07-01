@@ -19,9 +19,14 @@ fragment labelResults on ArtistConnection {
     node {
       mbid
       name
+      disambiguation
       type
       mediaWikiImages {
         url
+      }
+      rating {
+        voteCount
+        value
       }
       # releases {
       #   nodes {
