@@ -64,6 +64,7 @@ function SearchPage() {
   const theme = useTheme();
   const mediaQueryMatch = useMediaQuery(theme.breakpoints.up("sm"));
   const [search, { loading, data }] = useLazyQuery(MB_SEARCH_ARTIST);
+  const navigateToArtist = (id) => history.push(`/artist/${id}`);
   const searchQuery = () =>
     search({
       variables: {
@@ -96,7 +97,7 @@ function SearchPage() {
             [...new Array(50).keys()].map((i) => <ArtistCardSkeleton />)}
           {data &&
             data.search.artists.edges.map((artist) => (
-              <ArtistCard artist={artist} />
+              <ArtistCard artist={artist} onClick={navigateToArtist} />
             ))}
         </GridList>
       </Container>
