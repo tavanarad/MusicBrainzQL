@@ -8,7 +8,6 @@ const BootstrapInput = withStyles((theme) => ({
   },
   input: {
     borderRadius: 0,
-    backgroundColor: 'transparent',
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
     border: '0px solid #ced4da',

@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { ReactPhotoCollage } from "react-photo-collage";
 import AlbumIcon from "../../assets/album.svg";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   albumImages: {
     height: 200,
     textAlign: "center",
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AlbumCard({ id, title, photos, onClick }) {
+function AlbumCard({ title, photos, onClick }) {
   const classes = useStyles();
   return (
     <Card className={classes.albumCard}>

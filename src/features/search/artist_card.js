@@ -1,16 +1,16 @@
 import {
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   makeStyles,
   Typography,
-  CardActionArea,
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import PropTypes from "prop-types";
+import { Waypoint } from "react-waypoint";
 import artistIcon from "../../assets/artist.svg";
-import {getConnectionCursor, shouldFetchMore} from "../../shared/helpers";
-import {Waypoint} from "react-waypoint";
+import { shouldFetchMore } from "../../shared/helpers";
 
 const useStyles = makeStyles(() => ({
   artistCard: {
@@ -84,7 +84,9 @@ function ArtistCard({ artist, endCursor, onClick, onSeen }) {
             value={artist.node.rating?.value}
             readOnly
           />
-              { shouldFetchMore(endCursor, artist.cursor) && <Waypoint onEnter={() => onSeen(true)} />}
+          {shouldFetchMore(endCursor, artist.cursor) && (
+            <Waypoint onEnter={() => onSeen(true)} />
+          )}
         </CardContent>
       </CardActionArea>
     </Card>

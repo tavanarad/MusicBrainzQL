@@ -18,7 +18,7 @@ import { MB_LOOKUP_ARTIST } from "./ql_queries";
 import Title from "./title";
 import TitleSkeleton from "./title_skeleton";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     color: "#000000",
     background: "#ffffff",

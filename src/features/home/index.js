@@ -1,15 +1,11 @@
-import logo from '../../assets/logo.svg';
-import {Container, makeStyles, Paper, InputBase, InputAdornment, Select, MenuItem, Divider} from '@material-ui/core';
-import {useState} from 'react';
-import {useHistory} from 'react-router-dom';
-import SearchForm from '../../shared/components/search_form';
-import {QUERY_TYPE} from '../../shared/components/constants';
-
+import { Container, makeStyles } from "@material-ui/core";
+import logo from "../../assets/logo.svg";
+import SearchForm from "../../shared/components/search_form";
 
 const useStyles = makeStyles((theme) => ({
   logoContainer: {
-  textAlign: "center",
-  marginTop: 50,
+    textAlign: "center",
+    marginTop: 50,
   },
   logo: {
     width: 256,
@@ -26,21 +22,20 @@ const useStyles = makeStyles((theme) => ({
   },
   selectField: {
     margin: theme.spacing(1),
-  }
-})
-);
+  },
+}));
 
 function HomePage() {
   const classes = useStyles();
 
   return (
     <Container maxWidth="sm">
-      <div id='logoContainer' className={classes.logoContainer}>
-        <img src={logo} className={classes.logo} alt="MusicBrainz QL logo"/>
+      <div id="logoContainer" className={classes.logoContainer}>
+        <img src={logo} className={classes.logo} alt="MusicBrainz QL logo" />
       </div>
       <SearchForm />
     </Container>
-    );
+  );
 }
 
 export default HomePage;

@@ -4,12 +4,12 @@ export const MB_LOOKUP_ARTIST = gql`
 query Artist($mbid: MBID!) {
   lookup {
     artist(mbid: $mbid) {
-      ...labelResults
+      ...artistInfo
     }
   }
 }
 
-fragment labelResults on Artist {
+fragment artistInfo on Artist {
   mbid
   name
   disambiguation

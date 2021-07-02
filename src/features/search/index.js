@@ -6,7 +6,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import { Waypoint } from "react-waypoint";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { QUERY_TYPE } from "../../shared/components/constants";
@@ -123,8 +122,8 @@ function SearchPage() {
           {data &&
             data.search.artists.edges.map(
               (artist, i) =>
-              // There is a null value in the response of the query it happens always at record 162.
-              // TODO: I need to investigate more to find the reason in the BE code.
+                // There is a null value in the response of the query it happens always at record 162.
+                // TODO: I need to investigate more to find the reason in the BE code.
                 artist.node && (
                   <ArtistCard
                     key={i}
