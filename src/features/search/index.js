@@ -9,10 +9,10 @@ import {
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { QUERY_TYPE } from "../../shared/components/constants";
+import Header from "../../shared/components/header";
 import { useQueryParam } from "../../shared/hooks";
 import ArtistCard from "./artist_card";
 import ArtistCardSkeleton from "./artist_card_skeleton";
-import Header from "./header";
 import { MB_SEARCH_ARTIST } from "./ql_queries";
 
 const generateQuery = (query, type) => {
