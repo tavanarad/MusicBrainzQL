@@ -6,17 +6,23 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import artistIcon from "../../assets/artist.svg";
 import Header from "../../shared/components/header";
-import AlbumCardSkeleton from "./album_card_skeleton";
+import AlbumTracks from "./album-tracks";
 import AlbumCard from "./album_card";
+import AlbumCardSkeleton from "./album_card_skeleton";
 import { preparePhotoList } from "./helpers";
 import { MB_LOOKUP_ARTIST } from "./ql_queries";
 import Title from "./title";
 import TitleSkeleton from "./title_skeleton";
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    color: "#000000",
+    background: "#ffffff",
+  },
   container: {
     marginTop: 20,
   },
@@ -66,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ArtistPage() {
   const classes = useStyles();
+  const [selectedAlbum, selectAlbum] = useState(null);
   const { id: mbid } = useParams();
   const { loading, data } = useQuery(MB_LOOKUP_ARTIST, {
     variables: {
@@ -74,53 +81,62 @@ function ArtistPage() {
   });
 
   const getArtist = () => data && data.lookup.artist;
+  const handleAlbumOnClick = (album) => () => selectAlbum(album);
 
   return (
     <>
       <Header />
       <Container className={classes.container}>
-        <Paper elevation={3} className={classes.paper}>
-          {loading && <TitleSkeleton />}
-          {data && (
-            <Title
-              title={getArtist()?.name}
-              subtitle={getArtist()?.disambiguation}
-              avatarUri={
-                getArtist()?.mediaWikiImages.length
-                  ? getArtist().mediaWikiImages[0].url
-                  : artistIcon
-              }
-              rateValue={getArtist()?.rating.value}
-              voteCount={getArtist()?.rating.voteCount}
-            />
-          )}
-        </Paper>
-        <Typography
-          className={classes.albumTypography}
-          variant="h4"
-          gutterBottom
-        >
-          Albums
-        </Typography>
-        <Paper elevation={3} className={classes.paper}>
-          <GridList
-            className={classes.albumGridList}
-            cols={3}
-            cellHeight={300}
-            spacing={0}
-          >
-            {loading &&
-              [...new Array(3).keys()].map(() => <AlbumCardSkeleton />)}
-            {data &&
-              getArtist()?.releases?.nodes?.map((album) => (
-                <AlbumCard
-                  id={album.mbid}
-                  title={album.title}
-                  photos={preparePhotoList(album)}
+        {!selectedAlbum && (
+          <>
+            <Paper elevation={3} className={classes.paper}>
+              {loading && <TitleSkeleton />}
+              {data && (
+                <Title
+                  title={getArtist()?.name}
+                  subtitle={getArtist()?.disambiguation}
+                  avatarUri={
+                    getArtist()?.mediaWikiImages.length
+                      ? getArtist().mediaWikiImages[0].url
+                      : artistIcon
+                  }
+                  rateValue={getArtist()?.rating.value}
+                  voteCount={getArtist()?.rating.voteCount}
                 />
-              ))}
-          </GridList>
-        </Paper>
+              )}
+            </Paper>
+            <Typography
+              className={classes.albumTypography}
+              variant="h4"
+              gutterBottom
+            >
+              Albums
+            </Typography>
+            <Paper elevation={3} className={classes.paper}>
+              <GridList
+                className={classes.albumGridList}
+                cols={3}
+                cellHeight={300}
+                spacing={0}
+              >
+                {loading &&
+                  [...new Array(3).keys()].map(() => <AlbumCardSkeleton />)}
+                {data &&
+                  getArtist()?.releases?.nodes?.map((album) => (
+                    <AlbumCard
+                      id={album.mbid}
+                      title={album.title}
+                      photos={preparePhotoList(album)}
+                      onClick={handleAlbumOnClick(album)}
+                    />
+                  ))}
+              </GridList>
+            </Paper>
+          </>
+        )}
+        {selectedAlbum && (
+          <AlbumTracks album={selectedAlbum} onClose={handleAlbumOnClick} />
+        )}
       </Container>
     </>
   );

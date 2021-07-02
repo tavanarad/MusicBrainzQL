@@ -58,6 +58,18 @@ fragment labelResults on Artist {
           }
         }
       }
+      recordings{
+        totalCount
+        nodes{
+          mbid
+          title
+          length
+          rating {
+            voteCount
+            value
+          }
+        }
+      }
     }
   }
 }

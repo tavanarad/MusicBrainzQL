@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { ReactPhotoCollage } from "react-photo-collage";
+import AlbumIcon from "../../assets/album.svg";
 
 const useStyles = makeStyles((theme) => ({
   albumImages: {
@@ -36,22 +37,21 @@ const useStyles = makeStyles((theme) => ({
 
 function AlbumCard({ id, title, photos, onClick }) {
   const classes = useStyles();
-  console.log(photos);
   return (
     <Card className={classes.albumCard}>
       <CardMedia className={classes.albumImages}>
         <ReactPhotoCollage
           width="100%"
-          height={["150px", "50px"]}
-          layout={[1, 4]}
+          height={photos && photos.length > 4 ? ["150px", "50px"] : ["200px"]}
+          layout={photos && photos.length > 4 ? [1, 4] : [photos.length]}
           showNumOfRemainingPhotos
-          photos={photos}
+          photos={photos.length > 0 ? photos : [{ source: AlbumIcon.default }]}
         />
       </CardMedia>
-      <CardActionArea>
+      <CardActionArea onClick={onClick}>
         <CardContent>
           <Typography
-            classes={classes.titleTypography}
+            className={classes.titleTypography}
             variant="h5"
             gutterBottom
           >
