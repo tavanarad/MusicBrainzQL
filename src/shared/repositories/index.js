@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import {MUSIC_BRAINS_SERVER} from "../../configs";
+import { MUSIC_BRAINS_SERVER } from "../../configs";
 
 export const client = new ApolloClient({
   uri: MUSIC_BRAINS_SERVER,
@@ -11,7 +11,11 @@ export const client = new ApolloClient({
           search: {
             keyArgs: [],
             merge(existing = {}, incoming, args) {
-              if (!existing || !Object.keys(existing).length || !args.variables.endCursor) {
+              if (
+                !existing ||
+                !Object.keys(existing).length ||
+                !args.variables.endCursor
+              ) {
                 return incoming;
               }
 

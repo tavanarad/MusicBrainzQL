@@ -10,9 +10,9 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import artistIcon from "../../assets/artist.svg";
 import Header from "../../shared/components/header";
-import AlbumTracks from "./album_tracks";
 import AlbumCard from "./album_card";
 import AlbumCardSkeleton from "./album_card_skeleton";
+import AlbumTracks from "./album_tracks";
 import { preparePhotoList } from "./helpers";
 import { MB_LOOKUP_ARTIST } from "./ql_queries";
 import Title from "./title";
@@ -120,7 +120,9 @@ function ArtistPage() {
                 spacing={0}
               >
                 {loading &&
-                  [...new Array(3).keys()].map((i) => <AlbumCardSkeleton key={i} />)}
+                  [...new Array(3).keys()].map((i) => (
+                    <AlbumCardSkeleton key={i} />
+                  ))}
                 {data &&
                   getArtist()?.releases?.nodes?.map((album) => (
                     <AlbumCard
