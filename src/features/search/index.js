@@ -94,10 +94,10 @@ function SearchPage() {
           cols={mediaQueryMatch ? 5 : 2}
         >
           {loading &&
-            [...new Array(50).keys()].map((i) => <ArtistCardSkeleton />)}
+            [...new Array(50).keys()].map((i) => <ArtistCardSkeleton  key={i}/>)}
           {data &&
-            data.search.artists.edges.map((artist) => (
-              <ArtistCard artist={artist} onClick={navigateToArtist} />
+            data.search.artists.edges.map((artist, i) => (
+              <ArtistCard key={i} artist={artist} onClick={navigateToArtist} />
             ))}
         </GridList>
       </Container>

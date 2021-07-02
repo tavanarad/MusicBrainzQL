@@ -64,7 +64,6 @@ function ArtistCard({ artist, onClick }) {
           <Typography
             className={classes.caption}
             variant="caption"
-            display="inline-block"
             gutterBottom
           >
             {artist.node.disambiguation}
