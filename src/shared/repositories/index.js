@@ -1,8 +1,11 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { MUSIC_BRAINS_SERVER } from "../../configs";
+import { FETCH_CORS_MODE, MUSIC_BRAINS_SERVER } from "../../configs";
 
 export const client = new ApolloClient({
   uri: MUSIC_BRAINS_SERVER,
+  fetchOptions: {
+    mode: FETCH_CORS_MODE,
+  },
   connectToDevTools: true,
   cache: new InMemoryCache({
     typePolicies: {
