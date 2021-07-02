@@ -9,6 +9,8 @@ import {
 import { Rating } from "@material-ui/lab";
 import PropTypes from "prop-types";
 import artistIcon from "../../assets/artist.svg";
+import {getConnectionCursor, shouldFetchMore} from "../../shared/helpers";
+import {Waypoint} from "react-waypoint";
 
 const useStyles = makeStyles(() => ({
   artistCard: {
@@ -39,7 +41,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function ArtistCard({ artist, onClick }) {
+function ArtistCard({ artist, endCursor, onClick, onSeen }) {
   const classes = useStyles();
   const handleOnClick = () => onClick(artist.node.mbid);
 
@@ -82,6 +84,7 @@ function ArtistCard({ artist, onClick }) {
             value={artist.node.rating?.value}
             readOnly
           />
+              { shouldFetchMore(endCursor, artist.cursor) && <Waypoint onEnter={() => onSeen(true)} />}
         </CardContent>
       </CardActionArea>
     </Card>
@@ -89,7 +92,10 @@ function ArtistCard({ artist, onClick }) {
 }
 
 ArtistCard.propTypes = {
+  endCursor: PropTypes.string,
   artist: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
+  onSeen: PropTypes.func,
 };
 
 export default ArtistCard;

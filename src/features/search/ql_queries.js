@@ -1,9 +1,9 @@
 import {gql} from '@apollo/client';
 
 export const MB_SEARCH_ARTIST = gql`
-query Artist($query: String!) {
+query Artist($query: String!, $endCursor: String) {
   search {
-    artists(query: $query, first: 50) {
+    artists(query: $query, first: 50, after: $endCursor) {
       ...labelResults
     }
   }

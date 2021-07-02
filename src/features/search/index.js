@@ -6,7 +6,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import { useEffect } from "react";
+import { Waypoint } from "react-waypoint";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { QUERY_TYPE } from "../../shared/components/constants";
 import Header from "../../shared/components/header";
@@ -33,9 +34,10 @@ const useStyles = makeStyles(() => ({
     overflow: "hidden",
     justifyContent: "space-around",
     marginTop: 20,
+    padding: 0,
   },
   gridList: {
-    height: "100%",
+    height: "80vh",
     width: "100vw",
     justifyContent: "space-around",
   },
@@ -63,17 +65,34 @@ function SearchPage() {
 
   const theme = useTheme();
   const mediaQueryMatch = useMediaQuery(theme.breakpoints.up("sm"));
-  const [search, { loading, data }] = useLazyQuery(MB_SEARCH_ARTIST);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [search, { loading, data, fetchMore }] = useLazyQuery(
+    MB_SEARCH_ARTIST,
+    { errorPolicy: "ignore" }
+  );
+
   const navigateToArtist = (id) => history.push(`/artist/${id}`);
-  const searchQuery = () =>
-    search({
-      variables: {
-        query: generateQuery(
-          queryParameters.get("query"),
-          queryParameters.get("type")
-        ),
-      },
-    });
+  const searchQuery = (shouldFetchMore) => {
+    const variables = {
+      query: generateQuery(
+        queryParameters.get("query"),
+        queryParameters.get("type")
+      ),
+    };
+    if (!shouldFetchMore) {
+      search({
+        variables,
+      });
+    } else if (data.search.artists.pageInfo.hasNextPage) {
+      setIsFetchingMore(true);
+      fetchMore({
+        variables: {
+          ...variables,
+          endCursor: data.search.artists.pageInfo.endCursor,
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     if (queryParameters.get("query")) {
@@ -82,6 +101,10 @@ function SearchPage() {
       return history.push("/");
     }
   }, [queryParameters.get("query"), queryParameters.get("type")]);
+
+  useEffect(() => {
+    setIsFetchingMore(false);
+  }, [data]);
 
   return (
     <>
@@ -94,11 +117,26 @@ function SearchPage() {
           cols={mediaQueryMatch ? 5 : 2}
         >
           {loading &&
-            [...new Array(50).keys()].map((i) => <ArtistCardSkeleton  key={i}/>)}
-          {data &&
-            data.search.artists.edges.map((artist, i) => (
-              <ArtistCard key={i} artist={artist} onClick={navigateToArtist} />
+            [...new Array(50).keys()].map((i) => (
+              <ArtistCardSkeleton key={i} />
             ))}
+          {data &&
+            data.search.artists.edges.map(
+              (artist, i) =>
+              // There is a null value in the response of the query it happens always at record 162.
+              // TODO: I need to investigate more to find the reason in the BE code.
+                artist.node && (
+                  <ArtistCard
+                    key={i}
+                    artist={artist}
+                    endCursor={data.search.artists.pageInfo.endCursor}
+                    onClick={navigateToArtist}
+                    onSeen={searchQuery}
+                  />
+                )
+            )}
+          {isFetchingMore &&
+            [...new Array(5).keys()].map((i) => <ArtistCardSkeleton key={i} />)}
         </GridList>
       </Container>
     </>
