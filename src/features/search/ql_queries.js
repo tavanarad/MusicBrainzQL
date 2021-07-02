@@ -28,26 +28,6 @@ fragment labelResults on ArtistConnection {
         voteCount
         value
       }
-      # releases {
-      #   nodes {
-      #     coverArtArchive {
-      #       images {
-      #         image
-      #       }
-      #     }
-      #   }
-      #   # edges {
-      #   #   node {
-      #   #     mbid
-      #   #     title
-      #   #     coverArtArchive {
-      #   #       images {
-      #   #         image
-      #   #       }
-      #   #     }
-      #   #   }
-      #   # }
-      # }
       tags {
         edges {
           node {
