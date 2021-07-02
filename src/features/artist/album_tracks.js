@@ -54,6 +54,7 @@ function AlbumTracks({ album, onClose }) {
         <GridList className={classes.tracksGridList} cols={3} cellHeight={100}>
           {album.recordings.nodes.map((track) => (
             <TrackTile
+              key={track.mbid}
               title={track.title}
               rateValue={track.rating.value}
               voteCount={track.rating.voteCount}
