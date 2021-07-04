@@ -1,76 +1,64 @@
 import { gql } from "@apollo/client";
 
 export const MB_LOOKUP_ARTIST = gql`
-query Artist($mbid: MBID!) {
-  lookup {
-    artist(mbid: $mbid) {
-      ...artistInfo
+  query Artist($mbid: MBID!) {
+    lookup {
+      artist(mbid: $mbid) {
+        ...artistInfo
+      }
     }
   }
-}
 
-fragment artistInfo on Artist {
-  mbid
-  name
-  disambiguation
-  mediaWikiImages {
-    url
-  }
-  type
-  rating {
-    voteCount
-    value
-  }
-  tags {
-    edges {
-      node {
-        name
-        count
-      }
-    }
-  }
-  area {
+  fragment artistInfo on Artist {
+    mbid
     name
-  }
-  releases(type: ALBUM, status: OFFICIAL) {
-    totalCount
-    nodes {
-      mbid
-      title
-      disambiguation
-      media {
+    disambiguation
+    mediaWikiImages {
+      url
+    }
+    type
+    rating {
+      voteCount
+      value
+    }
+    releases(type: ALBUM, status: OFFICIAL) {
+      totalCount
+      nodes {
+        mbid
         title
-        format
-        trackCount
-        tracks {
-          title
-          number
-          length
-        }
-      }
-      date
-      coverArtArchive {
-        artwork
-        images {
-          image
-          thumbnails {
-            large
-          }
-        }
-      }
-      recordings{
-        totalCount
-        nodes{
-          mbid
-          title
-          length
-          rating {
-            voteCount
-            value
+        disambiguation
+        coverArtArchive {
+          artwork
+          images {
+            image
+            thumbnails {
+              large
+            }
           }
         }
       }
     }
   }
-}
+`;
+
+export const MB_LOOKUP_RELEASE = gql`
+  query Release($mbid: MBID!) {
+    lookup {
+      release(mbid: $mbid) {
+        mbid
+        title
+        recordings {
+          nodes {
+            mbid
+            title
+            length
+            rating {
+              value
+              voteCount
+            }
+          }
+        }
+      }
+    }
+  }
 `;

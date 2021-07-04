@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import {
   AppBar,
   GridList,
@@ -9,13 +10,20 @@ import {
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { PropTypes } from "prop-types";
+import ErrorMessage from "../../shared/components/error_message";
+import { MB_LOOKUP_RELEASE } from "./ql_queries";
 import TrackTile from "./track_tile";
+import TrackTileSkeleton from "./track_tile_skeleton";
 
 const useStyles = makeStyles(() => ({
   appBar: {
     color: "#000000",
     background: "#ffffff",
     height: 69,
+  },
+  paper: {
+    display: "flex",
+    padding: 10,
   },
   trackTypography: {
     marginTop: 20,
@@ -28,6 +36,13 @@ const useStyles = makeStyles(() => ({
 
 function AlbumTracks({ album, onClose }) {
   const classes = useStyles();
+  const { loading, error, data } = useQuery(MB_LOOKUP_RELEASE, {
+    variables: {
+      mbid: album.mbid,
+    },
+  });
+
+  const getTracks = () => data?.lookup?.release?.recordings?.nodes || [];
 
   return (
     <>
@@ -50,18 +65,28 @@ function AlbumTracks({ album, onClose }) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Paper elevation={3} className={classes.paper}>
-        <GridList className={classes.tracksGridList} cols={3} cellHeight={100}>
-          {album.recordings.nodes.map((track) => (
-            <TrackTile
-              key={track.mbid}
-              title={track.title}
-              rateValue={track.rating.value}
-              voteCount={track.rating.voteCount}
-            />
-          ))}
-        </GridList>
-      </Paper>
+      {error && <ErrorMessage />}
+      {!error && (
+        <Paper elevation={3} className={classes.paper}>
+          <GridList
+            className={classes.tracksGridList}
+            cols={3}
+            cellHeight={100}
+          >
+            {loading &&
+              [...new Array(8)].map((i) => <TrackTileSkeleton key={i} />)}
+            {data &&
+              getTracks().map((track) => (
+                <TrackTile
+                  key={track.mbid}
+                  title={track.title}
+                  rateValue={track.rating.value}
+                  voteCount={track.rating.voteCount}
+                />
+              ))}
+          </GridList>
+        </Paper>
+      )}
     </>
   );
 }
