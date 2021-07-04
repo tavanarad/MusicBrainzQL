@@ -74,7 +74,7 @@ function AlbumTracks({ album, onClose }) {
             cellHeight={100}
           >
             {loading &&
-              [...new Array(8)].map((i) => <TrackTileSkeleton key={i} />)}
+              [...new Array(8).keys()].map((i) => <TrackTileSkeleton key={i + 1} />)}
             {data &&
               getTracks().map((track) => (
                 <TrackTile
