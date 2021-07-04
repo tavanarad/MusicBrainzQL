@@ -35,8 +35,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: "space-around",
     marginTop: 20,
     padding: 0,
-    marginLeft: 24,
-    marginRight: 24,
   },
   gridList: {
     height: "80vh",
