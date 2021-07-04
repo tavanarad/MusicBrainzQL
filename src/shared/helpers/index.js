@@ -7,4 +7,4 @@ export const getConnectionCursor = (hashValue) => {
 };
 
 export const shouldFetchMore = (endCursor, currentCursor) =>
-  getConnectionCursor(endCursor) - getConnectionCursor(currentCursor) === 25;
+  getConnectionCursor(endCursor) - getConnectionCursor(currentCursor) === 7;
