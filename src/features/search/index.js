@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { QUERY_TYPE } from "../../shared/components/constants";
+import ErrorMessage from "../../shared/components/error_message";
 import Header from "../../shared/components/header";
 import { useQueryParam } from "../../shared/hooks";
 import ArtistCard from "./artist_card";
@@ -34,6 +35,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: "space-around",
     marginTop: 20,
     padding: 0,
+    marginLeft: 24,
+    marginRight: 24,
   },
   gridList: {
     height: "80vh",
@@ -65,7 +68,7 @@ function SearchPage() {
   const theme = useTheme();
   const mediaQueryMatch = useMediaQuery(theme.breakpoints.up("sm"));
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [search, { loading, data, fetchMore }] = useLazyQuery(
+  const [search, { loading, error, data, fetchMore }] = useLazyQuery(
     MB_SEARCH_ARTIST,
     { errorPolicy: "ignore" }
   );
@@ -109,6 +112,7 @@ function SearchPage() {
     <>
       <Header />
       <Container maxWidth="xl" className={classes.resultContainer}>
+        {error && <ErrorMessage />}
         <GridList
           cellHeight={208}
           className={classes.gridList}
@@ -116,10 +120,12 @@ function SearchPage() {
           cols={mediaQueryMatch ? 5 : 2}
         >
           {loading &&
+            !error &&
             [...new Array(50).keys()].map((i) => (
               <ArtistCardSkeleton key={i} />
             ))}
           {data &&
+            !error &&
             data.search.artists.edges.map(
               (artist, i) =>
                 // There is a null value in the response of the query it happens always at record 162.
